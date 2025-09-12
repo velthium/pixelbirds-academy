@@ -68,6 +68,85 @@ const [loading, setLoading] = useState(true);
             </div>
           </div>
         </section>
+
+        <section id="roadmap" className="py-5 bg-success-subtle">
+          <div className="container">
+            <h2 className="text-center mb-5">🚀 Roadmap</h2>
+
+            <div className="mx-auto" style={{ maxWidth: 600 }}>
+              {/* Timeline container */}
+              <div className="border-start border-3 border-success ps-4">
+                
+                {/* Item 1 */}
+                <div className="card shadow-sm mb-4 border-success-subtle">
+                  <div className="card-body">
+                    <h5 className="card-title mb-1">NFT Collection Launch</h5>
+                    <p className="card-text text-muted small">5,202 PixelBirds minted on Stargaze.</p>
+                    <span className="badge text-bg-success">✅ Done</span>
+                  </div>
+                </div>
+
+                {/* Item 2 */}
+                <div className="card shadow-sm mb-4 border-success-subtle">
+                  <div className="card-body">
+                    <h5 className="card-title mb-1">Website Foundation</h5>
+                    <p className="card-text text-muted small">Homepage, mint page & marketplace preview.</p>
+                    <span className="badge text-bg-success">✅ Done</span>
+                  </div>
+                </div>
+
+                {/* Item 3 */}
+                <div className="card shadow-sm mb-4 border-success-subtle">
+                  <div className="card-body">
+                    <h5 className="card-title mb-1">Game Creation</h5>
+                    <p className="card-text text-muted small">PixelBirds eco-game base mechanics.</p>
+                    <span className="badge text-bg-warning">⏳ In Progress</span>
+                  </div>
+                </div>
+
+                {/* Item 4 */}
+                <div className="card shadow-sm border-success-subtle">
+                  <div className="card-body">
+                    <h5 className="card-title mb-1">Game Improvements</h5>
+                    <p className="card-text text-muted small">Leaderboard, NFT skins, global impact stats.</p>
+                    <span className="badge text-bg-warning">⏳ In Progress</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="team" className="py-5 bg-light">
+          <div className="container">
+            <h2 className="text-center mb-5">👥 The Team</h2>
+
+            <div className="mx-auto" style={{ maxWidth: 600 }}>
+              <div className="border-start border-3 border-primary ps-4">
+                
+                {/* Team Member */}
+                <div className="card shadow-sm border-primary-subtle">
+                  <div className="card-body d-flex align-items-center">
+                    {/* Avatar / Logo */}
+                    <div className="me-3 fs-1">
+                    <Image src="/images/velthium-nft.png" alt="Mint page preview" width={360} height={220} className="img-fluid rounded-3" />
+                    </div>
+                    <div>
+                      <h5 className="card-title mb-1">Velthium</h5>
+                      <p className="card-text text-muted small mb-1">
+                        Creator of the NFT collection, the website, and the game.
+                      </p>
+                      <span className="badge text-bg-primary">Solo Builder</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
     </>
   )
