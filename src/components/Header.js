@@ -16,6 +16,12 @@ export default function Header() {
 
         <div className="collapse navbar-collapse" id="mainNav">
           <ul className="navbar-nav ms-auto align-items-md-center gap-2">
+            {/* ✅ Play only if connected */}
+            {address && (
+              <li className="nav-item">
+                <Link className="nav-link fs-5" href="/play">Play</Link>
+              </li>
+            )}
             <li className="nav-item"><Link className="nav-link fs-5" href="/#roadmap">Roadmap</Link></li>
             <li className="nav-item"><Link className="nav-link fs-5" href="/#team">The Team</Link></li>
 
