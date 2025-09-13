@@ -1,10 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useWallet } from '@/components/WalletProvider';
 import WalletSelector from '@/components/WalletSelector';
 
-export default function LoginPage() {
+function LoginScreen() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next') || '/play';
@@ -41,5 +41,19 @@ export default function LoginPage() {
         </small>
       </p>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container py-5 text-center">
+          <p className="text-muted">Loading…</p>
+        </div>
+      }
+    >
+      <LoginScreen />
+    </Suspense>
   );
 }
