@@ -1,9 +1,12 @@
 'use client';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useWallet } from '@/components/WalletProvider';
 
 export default function Header() {
   const { address, short, logout } = useWallet();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <header className="bg-dark">
@@ -16,7 +19,7 @@ export default function Header() {
 
         <div className="collapse navbar-collapse" id="mainNav">
           <ul className="navbar-nav ms-auto align-items-md-center gap-2">
-            {address && (
+            {mounted && address && (
               <li className="nav-item">
                 <Link className="nav-link fs-5" href="/play">Play</Link>
               </li>
@@ -24,27 +27,27 @@ export default function Header() {
             <li className="nav-item"><Link className="nav-link fs-5" href="/#roadmap">Roadmap</Link></li>
             <li className="nav-item"><Link className="nav-link fs-5" href="/#team">The Team</Link></li>
 
-            {!address ? (
-              <li className="nav-item">
+            {/* Wallet area */}
+            <li className="nav-item" suppressHydrationWarning>
+              {!mounted ? (
+                // placeholder to keep SSR/first client render identical
+                <span className="btn btn-success btn-sm rounded-pill px-3 invisible">Login</span>
+              ) : !address ? (
                 <Link
                   href={{ pathname: '/login', query: { next: '/play' } }}
                   className="btn btn-success btn-sm rounded-pill px-3"
                 >
                   🔗 Login
                 </Link>
-              </li>
-            ) : (
-              <>
-                <li className="nav-item">
+              ) : (
+                <div className="d-inline-flex align-items-center gap-2">
                   <span className="badge text-bg-success rounded-pill px-3 py-2">{short}</span>
-                </li>
-                <li className="nav-item">
                   <button onClick={logout} className="btn btn-outline-danger btn-sm rounded-pill px-3">
                     Logout
                   </button>
-                </li>
-              </>
-            )}
+                </div>
+              )}
+            </li>
 
             <li className="nav-item ms-1"><span className="fs-4" aria-hidden>🐦</span></li>
           </ul>

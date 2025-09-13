@@ -19,7 +19,7 @@ export default function BirdGame({ nft, onExit, width = 960, height = 720 }) {
     });
 
     loop.start();
-    return () => loop.stop();
+    return () => loop.dispose();
   }, [nft, onExit, width, height]);
 
   return (

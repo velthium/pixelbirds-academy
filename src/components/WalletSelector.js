@@ -1,14 +1,17 @@
 'use client';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useWallet } from '@/components/WalletProvider';
 
 export default function WalletSelector({ compact = false, className = '' }) {
   const { address, short, connecting, connectWith, logout } = useWallet();
+  const [detected, setDetected] = useState({ keplr: false, leap: false });
 
-  const detected = useMemo(() => ({
-    keplr: !!globalThis.window?.keplr,
-    leap:  !!globalThis.window?.leap,
-  }), []);
+  useEffect(() => {
+    setDetected({
+      keplr: !!window?.keplr,
+      leap:  !!window?.leap,
+    });
+  }, []);
 
   if (address) {
     return (
@@ -27,28 +30,18 @@ export default function WalletSelector({ compact = false, className = '' }) {
         className="btn btn-success btn-sm"
         onClick={() => connectWith('keplr')}
         disabled={connecting || !detected.keplr}
-        title={detected.keplr ? 'Connect with Keplr' : 'Install Keplr first'}
       >
         {connecting ? 'Connecting…' : 'Keplr'}
       </button>
-
       <button
         className="btn btn-success btn-sm"
         onClick={() => connectWith('leap')}
         disabled={connecting || !detected.leap}
-        title={detected.leap ? 'Connect with Leap' : 'Install Leap first'}
       >
         {connecting ? 'Connecting…' : 'Leap'}
       </button>
-
-      {/* Optional: show install hints when not detected */}
       {!detected.keplr && !detected.leap && (
-        <a
-          href="https://www.keplr.app/"
-          target="_blank"
-          rel="noreferrer"
-          className="btn btn-outline-secondary btn-sm"
-        >
+        <a href="https://www.keplr.app/" target="_blank" rel="noreferrer" className="btn btn-outline-secondary btn-sm">
           Install a wallet
         </a>
       )}

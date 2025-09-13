@@ -22,6 +22,7 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     last: 0,
     raf: 0,
     running: false,
+    attached: false,    // NEW: track if listeners are attached
   };
 
   // Assets
@@ -54,16 +55,30 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
   }
 
   function handleKeyDown(e) {
+    if (e.code === "Escape" && onExit) onExit();
+
+    if (state.gameOver) {
+      // ✅ Allow restart after Game Over
+      if (e.code === "Enter" || e.code === "Space") {
+        e.preventDefault();
+        restart();
+      }
+      return;
+    }
+
     if (e.code === "Space") {
       e.preventDefault();
-      if (!state.gameOver) state.vel = state.jump;
+      state.vel = state.jump;
     }
-    if (e.code === "Enter" && state.gameOver) restart();
-    if (e.code === "Escape" && onExit) onExit();
   }
 
   function handlePointerDown() {
-    if (!state.gameOver) state.vel = state.jump;
+    if (state.gameOver) {
+      // ✅ Click/Tap to restart
+      restart();
+      return;
+    }
+    state.vel = state.jump;
   }
 
   function onVisibilityChange() {
@@ -135,7 +150,7 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     if (hitTrash) {
       renderer.drawGameOver();
       state.gameOver = true;
-      stop();
+      stop(); // ⛔️ keep listeners so restart works
       return;
     }
 
@@ -143,12 +158,15 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
   }
 
   function start() {
+    // attach listeners once
+    if (!timers.attached) {
+      window.addEventListener("keydown", handleKeyDown, { passive: false });
+      canvas.addEventListener("pointerdown", handlePointerDown);
+      document.addEventListener("visibilitychange", onVisibilityChange);
+      timers.attached = true;
+    }
     if (timers.running) return;
     timers.running = true;
-
-    window.addEventListener("keydown", handleKeyDown, { passive: false });
-    canvas.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("visibilitychange", onVisibilityChange);
 
     timers.last = performance.now();
     timers.raf = requestAnimationFrame(loop);
@@ -158,11 +176,19 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     timers.running = false;
     if (timers.raf) cancelAnimationFrame(timers.raf);
     timers.raf = 0;
-
-    window.removeEventListener("keydown", handleKeyDown);
-    canvas.removeEventListener("pointerdown", handlePointerDown);
-    document.removeEventListener("visibilitychange", onVisibilityChange);
+    // ❌ do not remove listeners here
   }
 
-  return { start: restart, stop };
+  // Only on component unmount
+  function dispose() {
+    if (timers.attached) {
+      window.removeEventListener("keydown", handleKeyDown);
+      canvas.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      timers.attached = false;
+    }
+    stop();
+  }
+
+  return { start: restart, stop, dispose };
 }
