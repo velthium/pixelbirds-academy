@@ -36,18 +36,35 @@ const [loading, setLoading] = useState(true);
 
          {/* Panels */}
         <section className="py-4">
+          
           <div className="row g-4">
             <div className="col-12 col-lg-6">
-              <h3 className="text-center mb-3">Mint Page</h3>
-              <div className="bg-white border border-success-subtle rounded-4 p-3 d-flex justify-content-center bg-success-subtle">
-                <Image src="/images/mint-preview.webp" alt="Mint page preview" width={360} height={220} className="img-fluid rounded-3" />
-              </div>
+              <a
+                href="https://www.stargaze.zone/l/stars1d5frtu2txpy2c5v9jg60wqju2qk8cm8xg3k7s4k863m4hg9mt70sxlxtq2"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the collection on Stargaze marketplace"
+                className="d-block text-reset text-decoration-none"
+              >
+                <h3 className="text-center mb-3">Mint Page</h3>
+                <div className="bg-white border border-success-subtle rounded-4 p-3 d-flex justify-content-center bg-success-subtle">
+                  <Image src="/images/mint-preview.webp" alt="Mint page preview" width={360} height={220} className="img-fluid rounded-3" />
+                </div>
+              </a>
             </div>
             <div className="col-12 col-lg-6">
-              <h3 className="text-center mb-3">Marketplace</h3>
-              <div className="bg-white border border-success-subtle rounded-4 p-3 d-flex justify-content-center bg-success-subtle">
-                <Image src="/images/market-preview.webp" alt="Marketplace preview" width={360} height={220} className="img-fluid rounded-3" />
-              </div>
+              <a
+                href="https://www.stargaze.zone/m/stars1d5frtu2txpy2c5v9jg60wqju2qk8cm8xg3k7s4k863m4hg9mt70sxlxtq2/tokens"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the collection on Stargaze marketplace"
+                className="d-block text-reset text-decoration-none"
+              >
+                <h3 className="text-center mb-3">Marketplace</h3>
+                <div className="bg-white border border-success-subtle rounded-4 p-3 d-flex justify-content-center bg-success-subtle">
+                  <Image src="/images/market-preview.webp" alt="Marketplace preview" width={360} height={220} className="img-fluid rounded-3" />
+                </div>
+              </a>
             </div>
           </div>
         </section>
