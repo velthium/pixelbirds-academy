@@ -29,6 +29,8 @@ export default function BirdGame({ nft, onExit, width = 960, height = 720 }) {
       // ⛔️ Ne pas auto-soumettre ici
       onGameOver: (finalScore) => {
         setLastScore({ value: finalScore, tokenId: nft?.tokenId || null });
+        // fire-and-forget: incrémente le compteur “Games played”
+        fetch('/api/metrics/gameover', { method: 'POST' }).catch(() => {});
       },
     });
 

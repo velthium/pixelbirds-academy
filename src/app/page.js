@@ -1,6 +1,7 @@
 'use client'
 
 import PageTitle from '@/components/PageTitle';
+import HomeStats from '@/components/HomeStats';
 import { useEffect, useState } from 'react';
 import Image from "next/image";
 
@@ -24,26 +25,8 @@ const [loading, setLoading] = useState(true);
             each with its own characteristic.
           </p>
 
-          {/* Stats (row/col, fond vert doux) */}
-          <div className="bg-success-subtle border border-success-subtle rounded-4 shadow-sm px-3 py-4 my-4">
-            <div className="row text-center g-4 align-items-center">
-              {[
-                { label: 'Trees planted', value: '10,240', emoji: '🌳' },
-                { label: 'PixelBirds holders', value: '512', emoji: '🪺' },
-                { label: 'Games played', value: '3,421', emoji: '🎮' },
-              ].map((s, i) => (
-                <div key={i} className="col-12 col-md-4">
-                  <div className={`d-flex flex-column align-items-center ${i>0 ? 'border-start border-2 border-success ps-md-4' : ''}`}>
-                    <div className="fs-4">{s.label}</div>
-                    <div className="d-flex align-items-center justify-content-center gap-2 mt-1">
-                      <span className="fs-3">{s.value}</span>
-                      <span className="fs-1 lh-1">{s.emoji}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+
+          <HomeStats />
 
           <p className="mx-auto" style={{maxWidth: 980}}>
             Pixel Birds is on the Stargaze blockchain, renowned for its negligible energy consumption
