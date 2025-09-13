@@ -1,20 +1,28 @@
 "use client";
 
-// Utility function (no hooks here)
-export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
-  // Game state (plain objects)
+// No React hooks here — pure utility.
+export function createGameLoop({
+  canvas,
+  nftImageUrl,
+  onExit,
+  renderer,
+  address,    // optional, passed to onGameOver meta
+  tokenId,    // optional, passed to onGameOver meta
+  onGameOver, // optional callback(finalScore, { address, tokenId })
+}) {
+  // ------- State -------
   const state = {
     birdY: 200,
     vel: 0,
-    speed: 130,       // px/s
-    gravity: 900,     // px/s²
-    jump: -280,       // px/s
+    speed: 130,     // px/s
+    gravity: 900,   // px/s²
+    jump: -280,     // px/s
     obstacles: [],
     score: 0,
     gameOver: false,
   };
 
-  // Timers / delta tracking
+  // ------- Timers / RAF -------
   const timers = {
     spawnTimer: 0,
     spawnInterval: 900, // ms
@@ -22,14 +30,15 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     last: 0,
     raf: 0,
     running: false,
-    attached: false,    // NEW: track if listeners are attached
+    attached: false,    // listeners attached once
   };
 
-  // Assets
+  // ------- Asset (bird image) -------
   const birdImg = new Image();
   birdImg.crossOrigin = "anonymous";
   birdImg.src = nftImageUrl || "";
 
+  // ------- Core helpers -------
   function restart() {
     state.birdY = 200;
     state.vel = 0;
@@ -54,11 +63,12 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     if (state.obstacles.length > 200) state.obstacles.splice(0, 50);
   }
 
+  // ------- Inputs -------
   function handleKeyDown(e) {
     if (e.code === "Escape" && onExit) onExit();
 
     if (state.gameOver) {
-      // ✅ Allow restart after Game Over
+      // Allow restart after Game Over
       if (e.code === "Enter" || e.code === "Space") {
         e.preventDefault();
         restart();
@@ -74,7 +84,6 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
 
   function handlePointerDown() {
     if (state.gameOver) {
-      // ✅ Click/Tap to restart
       restart();
       return;
     }
@@ -86,9 +95,11 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     else if (!timers.running && !state.gameOver) start();
   }
 
+  // ------- Game loop -------
   function loop(now) {
     if (!timers.running) return;
 
+    // dt (clamped)
     const dtMs = now - timers.last;
     timers.last = now;
     const dt = Math.min(0.033, dtMs / 1000);
@@ -96,28 +107,28 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     timers.elapsed += dtMs;
     timers.spawnTimer += dtMs;
 
-    // Progressive difficulty
+    // difficulty scaling
     if (timers.elapsed % 2000 < dtMs) {
       state.speed = Math.min(state.speed + 6, 300);
       timers.spawnInterval = Math.max(timers.spawnInterval - 12, 500);
     }
 
-    // Physics
+    // physics
     state.vel += state.gravity * dt;
     state.birdY += state.vel * dt;
 
-    // Spawn obstacles
+    // spawn
     if (timers.spawnTimer >= timers.spawnInterval) {
       timers.spawnTimer = 0;
       spawnObstacle(renderer.viewH);
     }
 
-    // Move obstacles
+    // move obstacles
     const step = state.speed * dt;
     for (let i = 0; i < state.obstacles.length; i++) state.obstacles[i].x -= step;
     state.obstacles = state.obstacles.filter((o) => o.x > -40);
 
-    // Collision and scoring
+    // collisions + scoring
     const bird = { x: 80, y: state.birdY, w: 40, h: 40 };
     let hitTrash = false;
     let collected = 0;
@@ -141,7 +152,7 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     if (collected) state.score += 10 * collected;
     if (bird.y > renderer.viewH - bird.h || bird.y < 0) hitTrash = true;
 
-    // Draw frame
+    // draw
     renderer.clear();
     renderer.drawScene(state.obstacles);
     renderer.drawBird(birdImg, bird);
@@ -150,13 +161,17 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     if (hitTrash) {
       renderer.drawGameOver();
       state.gameOver = true;
-      stop(); // ⛔️ keep listeners so restart works
+      const finalScore = state.score;
+      // fire callback without blocking the frame
+      queueMicrotask(() => onGameOver?.(finalScore, { address, tokenId }));
+      stop(); // keep listeners so Enter/Click can restart
       return;
     }
 
     timers.raf = requestAnimationFrame(loop);
   }
 
+  // ------- Lifecycle -------
   function start() {
     // attach listeners once
     if (!timers.attached) {
@@ -176,10 +191,10 @@ export function createGameLoop({ canvas, nftImageUrl, onExit, renderer }) {
     timers.running = false;
     if (timers.raf) cancelAnimationFrame(timers.raf);
     timers.raf = 0;
-    // ❌ do not remove listeners here
+    // Do NOT remove listeners here (so restart works after Game Over)
   }
 
-  // Only on component unmount
+  // detach everything on unmount
   function dispose() {
     if (timers.attached) {
       window.removeEventListener("keydown", handleKeyDown);
