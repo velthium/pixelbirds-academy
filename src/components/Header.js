@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useWallet } from '@/components/WalletProvider';
 
 export default function Header() {
-  const { address, short, connecting, connect, logout } = useWallet();
+  const { address, short, logout } = useWallet();
 
   return (
     <header className="bg-dark">
@@ -16,7 +16,6 @@ export default function Header() {
 
         <div className="collapse navbar-collapse" id="mainNav">
           <ul className="navbar-nav ms-auto align-items-md-center gap-2">
-            {/* ✅ Play only if connected */}
             {address && (
               <li className="nav-item">
                 <Link className="nav-link fs-5" href="/play">Play</Link>
@@ -25,12 +24,14 @@ export default function Header() {
             <li className="nav-item"><Link className="nav-link fs-5" href="/#roadmap">Roadmap</Link></li>
             <li className="nav-item"><Link className="nav-link fs-5" href="/#team">The Team</Link></li>
 
-            {/* Zone Login/Logout */}
             {!address ? (
               <li className="nav-item">
-                <button onClick={connect} className="btn btn-success btn-sm rounded-pill px-3" disabled={connecting}>
-                  {connecting ? 'Connexion…' : '🔗 Connect Wallet'}
-                </button>
+                <Link
+                  href={{ pathname: '/login', query: { next: '/play' } }}
+                  className="btn btn-success btn-sm rounded-pill px-3"
+                >
+                  🔗 Login
+                </Link>
               </li>
             ) : (
               <>

@@ -1,33 +1,23 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useWallet } from '@/components/WalletProvider';
 
-export default function ConnectWalletButton({ onConnected, className = '', children }) {
-  const [busy, setBusy] = useState(false);
+export default function ConnectWalletButton({ className = '', children }) {
+  const { address, short, connecting, connect, logout } = useWallet();
 
-  const connect = useCallback(async () => {
-    try {
-      setBusy(true);
-      const chainId = 'stargaze-1';
-      if (!window.keplr) {
-        alert('Keplr non détecté. Installe l’extension puis réessaie.');
-        return;
-      }
-      await window.keplr.enable(chainId);
-      const offlineSigner = window.getOfflineSigner(chainId);
-      const accounts = await offlineSigner.getAccounts();
-      const addr = accounts?.[0]?.address;
-      if (addr) onConnected?.(addr);
-    } catch (e) {
-      console.error(e);
-      alert("Impossible de se connecter à Keplr.");
-    } finally {
-      setBusy(false);
-    }
-  }, [onConnected]);
+  if (address) {
+    return (
+      <div className={`d-inline-flex align-items-center gap-2 ${className}`}>
+        <span className="badge text-bg-success rounded-pill px-3 py-2">{short}</span>
+        <button onClick={logout} className="btn btn-outline-danger" disabled={connecting}>
+          Logout
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <button onClick={connect} className={`btn btn-success ${className}`} disabled={busy}>
-      {busy ? 'Connexion…' : (children ?? '🔗 Connect Wallet')}
+    <button onClick={connect} className={`btn btn-success ${className}`} disabled={connecting}>
+      {connecting ? 'Connecting…' : (children ?? '🔗 Connect Wallet')}
     </button>
   );
 }
