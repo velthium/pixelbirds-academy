@@ -10,6 +10,52 @@ export function createGameLoop({
   tokenId,    // optional, passed to onGameOver meta
   onGameOver, // optional callback(finalScore, { address, tokenId })
 }) {
+  // ------- SFX (Web Audio minimal, sans fichiers) -------
+  const audio = { ctx: null, enabled: true };
+
+  function initAudio() {
+    if (audio.ctx) return;
+    const AC = globalThis.AudioContext || globalThis.webkitAudioContext;
+    if (!AC) return;
+    audio.ctx = new AC();
+  }
+  function resumeAudio() {
+    if (audio.ctx && audio.ctx.state === "suspended") audio.ctx.resume();
+  }
+  function tone(freq = 440, dur = 0.08, type = "sine", vol = 0.18) {
+    if (!audio.enabled || !audio.ctx) return;
+    const t = audio.ctx.currentTime;
+    const osc = audio.ctx.createOscillator();
+    const gain = audio.ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.connect(gain); gain.connect(audio.ctx.destination);
+    osc.start(t); osc.stop(t + dur);
+  }
+  function noise(dur = 0.14, vol = 0.20) {
+    if (!audio.enabled || !audio.ctx) return;
+    const sr = audio.ctx.sampleRate;
+    const len = Math.max(1, Math.floor(sr * dur));
+    const buf = audio.ctx.createBuffer(1, len, sr);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    const src = audio.ctx.createBufferSource();
+    src.buffer = buf;
+    const g = audio.ctx.createGain();
+    g.gain.value = vol;
+    g.gain.exponentialRampToValueAtTime(0.001, audio.ctx.currentTime + dur);
+    src.connect(g); g.connect(audio.ctx.destination);
+    src.start();
+  }
+  const sfx = {
+    flap() { tone(660, 0.06, "sine", 0.12); },
+    seed() { tone(880, 0.05, "square", 0.10); setTimeout(() => tone(1200, 0.06, "square", 0.08), 45); },
+    hit()  { noise(0.12, 0.20); setTimeout(() => tone(140, 0.25, "sawtooth", 0.12), 10); },
+  };
+  // ------------------------------------------------------
+
   // ------- State -------
   const state = {
     birdY: 200,
@@ -67,10 +113,14 @@ export function createGameLoop({
   function handleKeyDown(e) {
     if (e.code === "Escape" && onExit) onExit();
 
+    // M = mute toggle (optionnel)
+    if (e.code === "KeyM") { audio.enabled = !audio.enabled; return; }
+
     if (state.gameOver) {
       // Allow restart after Game Over
       if (e.code === "Enter" || e.code === "Space") {
         e.preventDefault();
+        initAudio(); resumeAudio();
         restart();
       }
       return;
@@ -78,16 +128,20 @@ export function createGameLoop({
 
     if (e.code === "Space") {
       e.preventDefault();
+      initAudio(); resumeAudio();
       state.vel = state.jump;
+      sfx.flap();
     }
   }
 
   function handlePointerDown() {
+    initAudio(); resumeAudio();
     if (state.gameOver) {
       restart();
       return;
     }
     state.vel = state.jump;
+    sfx.flap();
   }
 
   function onVisibilityChange() {
@@ -140,6 +194,7 @@ export function createGameLoop({
       if (hitX && hitY) {
         if (o.type === "seed") {
           collected++;
+          sfx.seed(); // 🔊 son de collecte
           state.obstacles.splice(i, 1);
           i--;
         } else {
@@ -159,6 +214,7 @@ export function createGameLoop({
     renderer.drawHUD(state.score);
 
     if (hitTrash) {
+      sfx.hit(); // 🔊 son d'impact / game over
       renderer.drawGameOver();
       state.gameOver = true;
       const finalScore = state.score;
