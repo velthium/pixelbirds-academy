@@ -7,8 +7,8 @@ import { fromBase64, toUtf8 } from '@cosmjs/encoding';
 import { rawSecp256k1PubkeyToAddress } from '@cosmjs/amino';
 
 const redis = new Redis({
-  url: process.env.KV_REST_API_URL,      // tu as déjà ces env vars
-  token: process.env.KV_REST_API_TOKEN,  // (elles viennent d’Upstash via Vercel)
+  url: process.env.KV_REST_API_URL,      // provided by the Upstash integration
+  token: process.env.KV_REST_API_TOKEN,  // available through Vercel environment variables
 });
 
 const BECH32_PREFIX = 'stars'; // Stargaze
@@ -23,7 +23,7 @@ export async function POST(req) {
     const obj = JSON.parse(payload);
     const { address, score, tokenId, ts, nonce } = obj;
 
-    // Checks simples
+    // Basic input validation
     if (typeof address !== 'string' || typeof score !== 'number' || score < 0 || score > 1_000_000) {
       return NextResponse.json({ error: 'Invalid score' }, { status: 400 });
     }
@@ -34,7 +34,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Missing nonce' }, { status: 400 });
     }
 
-    // Vérif signature ADR-36
+    // Verify the ADR-36 signature
     const pub = fromBase64(pubkey);
     const sigBytes = fromBase64(signature);
     const hash = sha256(toUtf8(payload));
@@ -47,7 +47,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Address/pubkey mismatch' }, { status: 401 });
     }
 
-    // Best score par wallet + leaderboard
+    // Track the best score per wallet and keep the leaderboard updated
     const key = `score:${address}`;
     const prev = Number((await redis.get(key)) || 0);
     const best = Math.max(prev, score);

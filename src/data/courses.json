@@ -1,30 +1,411 @@
 [
   {
-    "id": "forest",
-    "title": "Protect the Forests",
-    "description": "Discover how trees capture CO₂ and support biodiversity.",
-    "content": "Forests play a vital role in regulating the climate and hosting over 80% of all terrestrial biodiversity.",
-    "quiz": [
+    "id": "amazon-rainforest",
+    "title": "Amazon Rainforest Expedition",
+    "tagline": "Plan a mission to protect the lungs of the Earth while learning key English vocabulary.",
+    "summary": "Join the PixelBird scientific crew on a bilingual journey through the Amazon Rainforest. You will coordinate research camps, collaborate with Indigenous partners, and stop illegal logging to keep the canopy alive.",
+    "badge": "Canopy Guardian",
+    "estimatedTime": "25 minutes",
+    "level": "Intermediate English",
+    "focusAreas": ["Biodiversity", "Community", "Climate"],
+    "sections": [
       {
-        "question": "What percentage of global CO₂ do forests absorb?",
-        "choices": ["10%", "30%", "50%"],
-        "answer": "30%"
+        "heading": "Why the Amazon matters",
+        "content": [
+          "The Amazon Rainforest covers 5.5 million square kilometres across nine countries. It stores around 123 billion tonnes of carbon and produces moisture that feeds rain clouds across South America.",
+          "More than 30 million people live in the Amazon basin, including 350 Indigenous groups whose knowledge is essential to long-term conservation."
+        ],
+        "points": [
+          "🌿 Hosts 10% of the planet's biodiversity",
+          "🌧️ Releases atmospheric rivers that stabilise climate",
+          "🧠 Holds Indigenous knowledge about sustainable medicine"
+        ]
+      },
+      {
+        "heading": "Mission objectives",
+        "content": [
+          "Your expedition must balance science, community impact, and funding. Each decision in the mini-game influences three metrics: Biodiversity Health, Community Trust, and Field Budget."
+        ],
+        "points": [
+          "Collect data on wildlife corridors",
+          "Support local rangers with fair pay",
+          "Invest in low-impact technology"
+        ]
       }
     ],
-    "badge": "Forest Guardian"
+    "game": {
+      "title": "Canopy Guardian Mission",
+      "intro": "Make strategic decisions for four critical scenarios. Keep every metric above zero and reach a total impact score of 12 to succeed.",
+      "successThreshold": 12,
+      "metrics": [
+        {
+          "id": "biodiversity",
+          "label": "Biodiversity Health",
+          "icon": "🦜",
+          "description": "Represents species protection and habitat quality.",
+          "start": 4
+        },
+        {
+          "id": "community",
+          "label": "Community Trust",
+          "icon": "🤝",
+          "description": "Measures collaboration with Indigenous and local partners.",
+          "start": 4
+        },
+        {
+          "id": "budget",
+          "label": "Field Budget",
+          "icon": "💰",
+          "description": "Tracks how wisely you invest limited resources.",
+          "start": 4
+        }
+      ],
+      "rounds": [
+        {
+          "id": "camp",
+          "title": "Choose your base camp",
+          "scenario": "You must establish a research base near a wildlife corridor threatened by logging.",
+          "options": [
+            {
+              "id": "floating-lab",
+              "label": "Deploy a floating solar-powered lab",
+              "description": "Expensive, but it avoids cutting new clearings and inspires students.",
+              "effects": { "biodiversity": 2, "community": 1, "budget": -2 },
+              "feedback": "The floating lab becomes a local attraction and protects the riverbanks, but maintenance costs spike."
+            },
+            {
+              "id": "repurpose",
+              "label": "Repurpose an abandoned logging camp",
+              "description": "Cheap option yet close to sensitive habitats.",
+              "effects": { "biodiversity": -1, "community": 1, "budget": 1 },
+              "feedback": "You save money but must invest time repairing the damage and rebuilding trust with nearby villages."
+            },
+            {
+              "id": "village-partner",
+              "label": "Partner with a nearby village cooperative",
+              "description": "Share revenue and hire local guides to monitor wildlife.",
+              "effects": { "biodiversity": 1, "community": 2, "budget": -1 },
+              "feedback": "Community co-management speeds up data collection and everyone feels represented."
+            }
+          ]
+        },
+        {
+          "id": "loggers",
+          "title": "Respond to illegal logging",
+          "scenario": "Night drones spot chainsaws along a protected border. How do you react?",
+          "options": [
+            {
+              "id": "rangers",
+              "label": "Finance rapid-response ranger patrols",
+              "description": "Send trained rangers with satellite phones and legal support.",
+              "effects": { "biodiversity": 2, "community": 1, "budget": -2 },
+              "feedback": "The patrol deters loggers and documents evidence for authorities, but it eats into your budget."
+            },
+            {
+              "id": "awareness",
+              "label": "Launch a social-media awareness blitz",
+              "description": "Create English videos showing the damage and calling for action.",
+              "effects": { "biodiversity": 0, "community": 2, "budget": -1 },
+              "feedback": "The videos go viral and empower local youth, yet the loggers move to a new site."
+            },
+            {
+              "id": "buy-timber",
+              "label": "Buy the timber to halt the operation",
+              "description": "An emergency purchase that stops chainsaws instantly but sets a precedent.",
+              "effects": { "biodiversity": 1, "community": 0, "budget": -3 },
+              "feedback": "You stop the cutting, but financiers question the long-term cost."
+            }
+          ]
+        },
+        {
+          "id": "education",
+          "title": "Design an education programme",
+          "scenario": "Teachers ask for English lessons with climate science vocabulary.",
+          "options": [
+            {
+              "id": "radio",
+              "label": "Broadcast bilingual radio classes",
+              "description": "Partner with community radio to deliver lessons across villages.",
+              "effects": { "biodiversity": 1, "community": 2, "budget": -1 },
+              "feedback": "Radio shows strengthen trust and inspire new forest guardians."
+            },
+            {
+              "id": "app",
+              "label": "Develop a mobile learning app",
+              "description": "High-tech and trackable but requires smartphones and data.",
+              "effects": { "biodiversity": 0, "community": -1, "budget": -2 },
+              "feedback": "Students enjoy the gamified lessons, yet connectivity gaps exclude remote learners."
+            },
+            {
+              "id": "teacher-training",
+              "label": "Fund teacher training workshops",
+              "description": "Invite Indigenous educators to co-create curriculum in English and local languages.",
+              "effects": { "biodiversity": 1, "community": 2, "budget": -2 },
+              "feedback": "Workshops blend ancestral knowledge with new science vocabulary, motivating entire schools."
+            }
+          ]
+        },
+        {
+          "id": "restoration",
+          "title": "Restore a degraded area",
+          "scenario": "A fire damaged 120 hectares. You must propose a recovery plan to donors.",
+          "options": [
+            {
+              "id": "drones",
+              "label": "Seed native trees using drones",
+              "description": "Fast deployment but limited species diversity.",
+              "effects": { "biodiversity": 1, "community": 0, "budget": -2 },
+              "feedback": "The drones impress donors and stabilise soil quickly, though the forest remains young."
+            },
+            {
+              "id": "nurseries",
+              "label": "Create community-run nurseries",
+              "description": "Empower families to cultivate seedlings and track survival rates.",
+              "effects": { "biodiversity": 2, "community": 2, "budget": -2 },
+              "feedback": "Families plant diverse species and share success stories in English and Indigenous languages."
+            },
+            {
+              "id": "research",
+              "label": "Study natural regeneration",
+              "description": "Collect long-term data before intervening, conserving funds.",
+              "effects": { "biodiversity": 1, "community": 1, "budget": 1 },
+              "feedback": "Patience pays off as new species emerge, and the saved funds finance future expeditions."
+            }
+          ]
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "question": "What is a wildlife corridor?",
+        "choices": [
+          "A river where scientists build dams",
+          "A connected route that animals use to migrate safely",
+          "A storage building for expedition equipment"
+        ],
+        "answer": "A connected route that animals use to migrate safely",
+        "explanation": "Wildlife corridors allow species to travel between habitats without crossing dangerous human-made barriers."
+      },
+      {
+        "question": "Which expression best describes \"community trust\"?",
+        "choices": [
+          "Confidence between partners working toward the same goal",
+          "Money reserved for emergencies",
+          "A type of protected rainforest tree"
+        ],
+        "answer": "Confidence between partners working toward the same goal",
+        "explanation": "Community trust reflects how confident local partners feel about collaborating on conservation projects."
+      },
+      {
+        "question": "What does the verb \"to restore\" mean in the context of ecology?",
+        "choices": [
+          "To remove every tree",
+          "To return an ecosystem to a healthier state",
+          "To translate documents"
+        ],
+        "answer": "To return an ecosystem to a healthier state",
+        "explanation": "Restoration describes actions that help a damaged ecosystem recover its structure and functions."
+      }
+    ],
+    "resources": [
+      {
+        "label": "UN: Living Amazon Report",
+        "url": "https://www.un.org/sustainabledevelopment/blog/2022/07/the-living-amazon-report/",
+        "description": "Key figures about biodiversity and Indigenous leadership."
+      },
+      {
+        "label": "RAISG Interactive Map",
+        "url": "https://www.raisg.org/en/",
+        "description": "Visualise deforestation and protected areas across the Amazon."
+      }
+    ]
   },
   {
-    "id": "oceans",
-    "title": "Protect the Oceans",
-    "description": "Learn how oceans regulate our climate and sustain life on Earth.",
-    "content": "Oceans cover 70% of the planet’s surface and produce more than half of the oxygen we breathe.",
-    "quiz": [
+    "id": "coral-reef-rescue",
+    "title": "Coral Reef Rescue",
+    "tagline": "Use English to plan community-led reef restoration in the Caribbean.",
+    "summary": "Bleaching events threaten fish populations and tourism. Learn the vocabulary of marine science and lead a rapid response that balances ecology with local livelihoods.",
+    "badge": "Reef Rescuer",
+    "estimatedTime": "20 minutes",
+    "level": "Upper-Elementary English",
+    "focusAreas": ["Oceans", "Climate", "Tourism"],
+    "sections": [
       {
-        "question": "How much of the Earth’s surface is covered by oceans?",
-        "choices": ["50%", "70%", "90%"],
-        "answer": "70%"
+        "heading": "The science",
+        "content": [
+          "Coral reefs cover less than 1% of the ocean floor yet support 25% of marine species. When ocean temperatures rise, corals expel the algae that feed them, creating bleaching events.",
+          "Community action in English connects local dive teams with international researchers who can provide funding and equipment."
+        ]
+      },
+      {
+        "heading": "Your mission",
+        "content": [
+          "Coordinate a reef restoration hub, teach eco-tourism phrases, and protect the livelihoods that depend on healthy coral."
+        ],
+        "points": [
+          "Build underwater nurseries",
+          "Train guides to brief visitors in English",
+          "Track coral health with open-data tools"
+        ]
       }
     ],
-    "badge": "Ocean Defender"
+    "game": {
+      "title": "Reef Rapid-Response",
+      "intro": "Navigate three urgent decisions to keep coral polyps alive. Reach a score of 10 or more for a thriving reef.",
+      "successThreshold": 10,
+      "metrics": [
+        {
+          "id": "resilience",
+          "label": "Reef Resilience",
+          "icon": "🐠",
+          "description": "Shows how well coral can resist stress.",
+          "start": 3
+        },
+        {
+          "id": "community",
+          "label": "Community Pride",
+          "icon": "🏝️",
+          "description": "Captures how local families feel about protecting the reef.",
+          "start": 3
+        },
+        {
+          "id": "funding",
+          "label": "Funding",
+          "icon": "💵",
+          "description": "Represents grants and tourism revenue.",
+          "start": 3
+        }
+      ],
+      "rounds": [
+        {
+          "id": "monitoring",
+          "title": "Collect bleaching data",
+          "scenario": "You have 48 hours to measure water temperatures and coral colour.",
+          "options": [
+            {
+              "id": "citizen-science",
+              "label": "Recruit snorkelers as citizen scientists",
+              "description": "Provide waterproof vocabulary cards and data sheets.",
+              "effects": { "resilience": 1, "community": 2, "funding": -1 },
+              "feedback": "Families feel empowered, and international NGOs share your reports widely."
+            },
+            {
+              "id": "drone",
+              "label": "Rent a thermal drone",
+              "description": "Fast results but high daily cost.",
+              "effects": { "resilience": 2, "community": 0, "funding": -2 },
+              "feedback": "Accurate maps guide divers, though your budget shrinks."
+            },
+            {
+              "id": "lab",
+              "label": "Wait for a university lab",
+              "description": "Free analysis but results arrive late.",
+              "effects": { "resilience": 0, "community": -1, "funding": 1 },
+              "feedback": "The delay frustrates fishers, even if the data is precise."
+            }
+          ]
+        },
+        {
+          "id": "nursery",
+          "title": "Scale coral nurseries",
+          "scenario": "Storm season approaches and young corals need safe habitats.",
+          "options": [
+            {
+              "id": "rope",
+              "label": "Install rope nurseries with volunteer divers",
+              "description": "Affordable, requires strong teamwork and English safety briefings.",
+              "effects": { "resilience": 2, "community": 2, "funding": -1 },
+              "feedback": "Tourists join weekend restoration dives and donate gear."
+            },
+            {
+              "id": "3d-prints",
+              "label": "Deploy 3D-printed reef structures",
+              "description": "High-tech modules offer instant habitat but shipping is costly.",
+              "effects": { "resilience": 2, "community": 0, "funding": -2 },
+              "feedback": "Fish colonise quickly, yet you must secure new sponsors."
+            },
+            {
+              "id": "focus-education",
+              "label": "Pause nurseries and invest in school programmes",
+              "description": "Teach marine vocabulary first, then return to the water.",
+              "effects": { "resilience": 0, "community": 2, "funding": 0 },
+              "feedback": "Students organise clean-up days, but coral recovery slows."
+            }
+          ]
+        },
+        {
+          "id": "tourism",
+          "title": "Manage eco-tourism",
+          "scenario": "A cruise company offers to bring 400 visitors per month.",
+          "options": [
+            {
+              "id": "limit",
+              "label": "Limit visitors and raise prices",
+              "description": "Fewer people but better guides and reef-friendly briefings.",
+              "effects": { "resilience": 1, "community": 1, "funding": 1 },
+              "feedback": "Small groups respect the reef and spend more on local crafts."
+            },
+            {
+              "id": "accept",
+              "label": "Accept the offer with strict rules",
+              "description": "Invest in floating barriers and English signage.",
+              "effects": { "resilience": -1, "community": 1, "funding": 2 },
+              "feedback": "Revenue grows, yet snorkelling pressure stresses the coral."
+            },
+            {
+              "id": "reject",
+              "label": "Reject mass tourism entirely",
+              "description": "Focus on research partnerships instead.",
+              "effects": { "resilience": 2, "community": 1, "funding": -1 },
+              "feedback": "Scientists applaud the decision, though some guides lose short-term income."
+            }
+          ]
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "question": "What is coral bleaching?",
+        "choices": [
+          "A celebration where reefs are painted white",
+          "A stress response where corals lose the algae that feed them",
+          "A technique to clean ship hulls"
+        ],
+        "answer": "A stress response where corals lose the algae that feed them",
+        "explanation": "Bleaching occurs when high temperatures force corals to expel symbiotic algae, turning them pale and weak."
+      },
+      {
+        "question": "What does \"eco-tourism briefing\" mean?",
+        "choices": [
+          "A business meeting to sell cruise tickets",
+          "Instructions that teach visitors how to protect the environment during their trip",
+          "A radio programme about local sports"
+        ],
+        "answer": "Instructions that teach visitors how to protect the environment during their trip",
+        "explanation": "An eco-tourism briefing gives travellers clear guidelines for respectful and safe environmental behaviour."
+      },
+      {
+        "question": "Which option best defines \"reef resilience\"?",
+        "choices": [
+          "The number of boats visiting a reef",
+          "The ability of coral ecosystems to recover from stress",
+          "The price of scuba equipment"
+        ],
+        "answer": "The ability of coral ecosystems to recover from stress",
+        "explanation": "Resilience is the capacity of the reef to bounce back after storms, heat waves, or pollution."
+      }
+    ],
+    "resources": [
+      {
+        "label": "NOAA Coral Reef Conservation",
+        "url": "https://coralreef.noaa.gov/",
+        "description": "Practical restoration toolkits and educational vocabulary."
+      },
+      {
+        "label": "IYOR Reef Resilience Network",
+        "url": "https://reefresilience.org/",
+        "description": "Case studies about community-led reef protection."
+      }
+    ]
   }
 ]
