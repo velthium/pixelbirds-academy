@@ -1,13 +1,16 @@
 'use client';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useWallet } from '@/components/WalletProvider';
 import WalletSelector from '@/components/WalletSelector';
 
+const ALLOWED_NEXT_ROUTES = new Set(['/', '/academy', '/play', '/leaderboard']);
+
 function LoginScreen() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get('next') || '/play';
+  const nextParam = searchParams.get('next');
+  const next = useMemo(() => (nextParam && ALLOWED_NEXT_ROUTES.has(nextParam) ? nextParam : '/academy'), [nextParam]);
 
   const { address, connecting } = useWallet();
   const [showPicker, setShowPicker] = useState(false);

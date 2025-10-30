@@ -102,5 +102,5 @@ export function useWallet() {
   return useContext(WalletContext);
 }
 
-// (facultatif) export par défaut du provider
+// Default export keeps the provider simple to consume
 export default WalletProvider;

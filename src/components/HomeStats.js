@@ -6,8 +6,17 @@ function fmt(n) {
   catch { return String(n ?? 0); }
 }
 
+function formatDelta(n) {
+  if (n === null || n === undefined) return null;
+  const num = Number(n);
+  if (!Number.isFinite(num)) return null;
+  if (num === 0) return 'Updated today';
+  const sign = num > 0 ? '+' : '−';
+  return `${sign}${fmt(Math.abs(num))}`;
+}
+
 export default function HomeStats({ refreshMs = 30000, className = '' }) {
-  const [data, setData] = useState({ treesPlanted: 0, holders: 0, gamesPlayed: 0 });
+  const [data, setData] = useState({ treesPlanted: 0, holders: 0, gamesPlayed: 0, daily: {} });
   const [loading, setLoading] = useState(true);
 
   async function load() {
@@ -27,9 +36,24 @@ export default function HomeStats({ refreshMs = 30000, className = '' }) {
   }, [refreshMs]);
 
   const items = useMemo(() => ([
-    { label: 'Trees planted',      value: loading ? '…' : fmt(data.treesPlanted), emoji: '🌳' },
-    { label: 'PixelBirds holders', value: loading ? '…' : fmt(data.holders),      emoji: '🪺' },
-    { label: 'Games played',       value: loading ? '…' : fmt(data.gamesPlayed),  emoji: '🎮' },
+    {
+      label: 'Trees planted',
+      value: loading ? '…' : fmt(data.treesPlanted),
+      emoji: '🌳',
+      delta: loading ? null : formatDelta(data?.daily?.treesPlanted),
+    },
+    {
+      label: 'PixelBirds holders',
+      value: loading ? '…' : fmt(data.holders),
+      emoji: '🪺',
+      delta: loading ? null : formatDelta(data?.daily?.holders),
+    },
+    {
+      label: 'Games played',
+      value: loading ? '…' : fmt(data.gamesPlayed),
+      emoji: '🎮',
+      delta: loading ? null : formatDelta(data?.daily?.gamesPlayed),
+    },
   ]), [loading, data]);
 
   return (
@@ -43,6 +67,12 @@ export default function HomeStats({ refreshMs = 30000, className = '' }) {
                 <span className="fs-3">{s.value}</span>
                 <span className="fs-1 lh-1" aria-hidden>{s.emoji}</span>
               </div>
+              {s.delta && (
+                <span className="badge text-bg-white border border-success-subtle text-success-emphasis mt-2 small">
+                  {s.delta}
+                  {s.delta === 'Updated today' ? '' : ' today'}
+                </span>
+              )}
             </div>
           </div>
         ))}

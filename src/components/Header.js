@@ -24,6 +24,11 @@ export default function Header() {
                 <Link className="nav-link fs-5" href="/academy">Academy</Link>
               </li>
             )}
+            <li className="nav-item">
+              <Link className="nav-link fs-5" href="/play">
+                Play
+              </Link>
+            </li>
             <li className="nav-item"><a className="nav-link fs-5" href="/leaderboard">Leaderboard</a></li>
             <li className="nav-item"><Link className="nav-link fs-5" href="/#roadmap">Roadmap</Link></li>
             <li className="nav-item"><Link className="nav-link fs-5" href="/#team">The Team</Link></li>
@@ -35,7 +40,7 @@ export default function Header() {
                 <span className="btn btn-success btn-sm rounded-pill px-3 invisible">Login</span>
               ) : !address ? (
                 <Link
-                  href={{ pathname: '/login', query: { next: '/play' } }}
+                  href={{ pathname: '/login', query: { next: '/academy' } }}
                   className="btn btn-success btn-sm rounded-pill px-3"
                 >
                   🔗 Login
