@@ -1,0 +1,30 @@
+[
+  {
+    "id": "forest",
+    "title": "Protect the Forests",
+    "description": "Discover how trees capture CO₂ and support biodiversity.",
+    "content": "Forests play a vital role in regulating the climate and hosting over 80% of all terrestrial biodiversity.",
+    "quiz": [
+      {
+        "question": "What percentage of global CO₂ do forests absorb?",
+        "choices": ["10%", "30%", "50%"],
+        "answer": "30%"
+      }
+    ],
+    "badge": "Forest Guardian"
+  },
+  {
+    "id": "oceans",
+    "title": "Protect the Oceans",
+    "description": "Learn how oceans regulate our climate and sustain life on Earth.",
+    "content": "Oceans cover 70% of the planet’s surface and produce more than half of the oxygen we breathe.",
+    "quiz": [
+      {
+        "question": "How much of the Earth’s surface is covered by oceans?",
+        "choices": ["50%", "70%", "90%"],
+        "answer": "70%"
+      }
+    ],
+    "badge": "Ocean Defender"
+  }
+]

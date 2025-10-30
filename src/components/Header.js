@@ -21,7 +21,7 @@ export default function Header() {
           <ul className="navbar-nav ms-auto align-items-md-center gap-2">
             {mounted && address && (
               <li className="nav-item">
-                <Link className="nav-link fs-5" href="/play">Play</Link>
+                <Link className="nav-link fs-5" href="/academy">Academy</Link>
               </li>
             )}
             <li className="nav-item"><a className="nav-link fs-5" href="/leaderboard">Leaderboard</a></li>
